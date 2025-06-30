@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClassPass Process Refresher</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Define CSS variables for easier color management */
+            --primary-maroon: #800000; /* Darker maroon for primary elements */
+            --light-maroon: #A0522D; /* Slightly lighter maroon for backgrounds/accents (Sienna) */
+            --accent-red: #D9534F; /* Keep the red for critical elements for high contrast */
+            --white: #FFFFFF; /* Pure white for maximum visibility on dark backgrounds */
+            --light-gray: #F4F4F4;
+            --dark-text-color: #333333; /* Darker text for light backgrounds */
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif; /* Apply Quicksand font */
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-gray);
+            display: flex;
+            flex-direction: column; /* Allow content to flow vertically */
+            align-items: center; /* Center the presentation container */
+            min-height: 100vh;
+            scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+        }
+
+        .presentation-container {
+            width: 100%;
+            max-width: 1000px;
+            background-color: var(--white);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            overflow: hidden; /* For smooth slide transitions if you add JS later */
+        }
+
+        /* --- Sticky Navigation Bar --- */
+        .navbar {
+            position: sticky; /* Makes the nav bar stick */
+            top: 0; /* Sticks it to the very top */
+            width: 100%;
+            max-width: 1000px; /* Match presentation container width */
+            background-color: var(--primary-maroon); /* Changed from navy-blue */
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000; /* Ensures it stays above other content */
+            text-align: center;
+        }
+
+        .navbar button {
+            background-color: var(--light-maroon); /* Changed from light-navy-blue */
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 15px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 500;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+
+        .navbar button:hover {
+            background-color: #602D15; /* Slightly darker maroon on hover (adjust as needed) */
+            transform: translateY(-1px);
+        }
+
+        .navbar button:active {
+            transform: translateY(0);
+        }
+
+        .slide {
+            padding: 40px;
+            box-sizing: border-box;
+            border-bottom: 1px solid #eee;
+            min-height: 500px; /* Ensures a minimum height for each slide */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* --- Workstream Section Header --- */
+        .workstream-header-slide {
+            background-color: var(--light-maroon); /* Changed from light-navy-blue */
+            text-align: center;
+            padding: 60px 40px; /* More padding for a prominent header */
+            border-bottom: none; /* No border for these headers */
+        }
+        /* Make sure all text within workstream-header-slide is WHITE */
+        .workstream-header-slide h2,
+        .workstream-header-slide p {
+            color: var(--white); /* FORCED TO WHITE FOR VISIBILITY */
+            font-weight: 700; /* Ensuring bold for visibility */
+        }
+        .workstream-header-slide h2 {
+            font-size: 2.5em;
+            margin-bottom: 0;
+            border-bottom: 2px solid var(--white); /* Matching border to text color */
+        }
+        .workstream-header-slide p {
+            font-size: 1.3em;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+
+        /* --- Specific Slide Styling --- */
+        .slide:first-child { /* Title Slide */
+            text-align: center;
+            background-color: var(--primary-maroon); /* Changed from navy-blue */
+        }
+
+        /* All content on the title slide (h1, p) should be white */
+        .slide:first-child h1,
+        .slide:first-child p {
+            color: var(--white);
+        }
+
+
+        .slide h2 {
+            color: var(--dark-text-color); /* Default dark color for headers on white background */
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--primary-maroon); /* Changed from navy-blue */
+            padding-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .slide h3 {
+            color: var(--dark-text-color); /* Default dark color for h3 on white background */
+            font-size: 1.5em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .slide p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: var(--dark-text-color); /* Default dark text for paragraphs on white background */
+            font-weight: 400;
+        }
+
+        .slide ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .slide ul li {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 8px;
+            color: var(--dark-text-color);
+            font-weight: 400;
+        }
+
+        .deviation-description {
+            font-weight: 700;
+            color: var(--accent-red);
+        }
+
+        .impact-statement {
+            font-weight: 700;
+            color: var(--accent-red);
+            margin-top: 10px;
+            margin-bottom: 20px;
+            padding-left: 10px;
+            border-left: 4px solid var(--accent-red);
+        }
+
+        .agent-pov-reminder, .call-to-action, .closing-statement {
+            font-weight: 700;
+            color: var(--primary-maroon); /* Changed from navy-blue */
+            margin-top: 20px;
+            padding: 10px 0;
+        }
+
+        .tip-box {
+            background-color: var(--light-maroon); /* Changed from light-navy-blue */
+            color: var(--white);
+            border-left: 5px solid var(--primary-maroon); /* Changed from navy-blue */
+            padding: 15px 20px;
+            margin-top: 25px;
+            border-radius: 5px;
+        }
+
+        .tip-box h4 {
+            color: var(--white);
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .tip-box ul {
+            list-style-type: circle;
+            margin-left: 15px;
+            margin-bottom: 0;
+        }
+
+        .tip-box ul li {
+            color: var(--white);
+        }
+
+        .deviation-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #FFF0F0;
+            border-left: 5px solid var(--accent-red);
+            border-radius: 5px;
+        }
+        .deviation-section h4 {
+            color: var(--accent-red);
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        .prepared-by {
+            font-size: 1.4em;
+            margin-top: 30px;
+            font-weight: 600;
+        }
+
+        /* Styling for severity level tags */
+        .severity {
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-left: 10px;
+            white-space: nowrap; /* Keep it on one line */
+        }
+
+        .severity.critical { background-color: #A30000; color: white; } /* Darker red */
+        .severity.high { background-color: #FF4136; color: white; } /* Brighter red */
+        .severity.mid { background-color: #FF851B; color: white; } /* Orange */
+        .severity.low { background-color: #FFDC00; color: #333; } /* Yellow, dark text */
+
+        .forms-link {
+            display: block; /* Makes the link take full width and new line */
+            margin-top: 30px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .forms-link a {
+            color: var(--primary-maroon); /* Changed from navy-blue */
+            text-decoration: underline;
+            padding: 10px 15px;
+            border: 2px solid var(--primary-maroon); /* Changed from navy-blue */
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .forms-link a:hover {
+            background-color: var(--primary-maroon); /* Changed from navy-blue */
+            color: var(--white);
+            text-decoration: none;
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 20px;
+                min-height: auto;
+            }
+            .slide h1 {
+                font-size: 2em;
+            }
+            .slide h2 {
+                font-size: 1.6em;
+            }
+            .slide h3 {
+                font-size: 1.2em;
+            }
+            .slide p, .slide ul li {
+                font-size: 1em;
+            }
+            .prepared-by {
+                font-size: 1.2em;
+            }
+            .workstream-header-slide {
+                padding: 40px 20px;
+            }
+            .workstream-header-slide h2 {
+                font-size: 2em;
+            }
+            .workstream-header-slide p {
+                font-size: 1.1em;
+            }
+            .navbar button {
+                padding: 6px 10px;
+                font-size: 0.8em;
+                margin: 2px;
+            }
+            .forms-link a {
+                font-size: 1em;
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <button onclick="scrollToId('intro')">Intro</button>
+        <button onclick="scrollToId('concierge-reservations')">Concierge</button>
+        <button onclick="scrollToId('partner-launch')">Partner Launch</button>
+        <button onclick="scrollToId('sop-ticketing')">SOP Ticketing</button>
+        <button onclick="scrollToId('hapi-reservation')">HAPI Res.</button>
+        <button onclick="scrollToId('hapi-scheduling')">HAPI Sched.</button>
+        <button onclick="scrollToId('expand-team')">Expand Team</button>
+        <button onclick="scrollToId('corporate-workstream')">Corporate</button>
+        <button onclick="scrollToId('all-lobs')">All LOBs</button>
+        <button onclick="scrollToId('partner-support')">Partner Support</button>
+        <button onclick="scrollToId('project-team')">Project Team</button>
+        <button onclick="scrollToId('specialized-processes')">Specialized</button>
+        <button onclick="scrollToId('key-takeaways')">Takeaways</button>
+    </div>
+
+    <div class="presentation-container">
+
+        <div class="slide" id="intro">
+            <h1>Elevating Excellence: A Refresher on Process Adherence</h1>
+            <p>Ensuring Quality and Compliance in Every Interaction</p>
+            <p class="prepared-by">Prepared by: ClassPass QA Team</p>
+        </div>
+
+        <div class="slide">
+            <h2>Why Are We Here?</h2>
+            <p>Every interaction we have with partners and users reflects on ClassPass. Adhering to our processes isn't just about following rules – it's about:</p>
+            <ul>
+                <li><strong>Protecting our Users & Partners:</strong> Ensuring accurate information, timely payments, and secure data.</li>
+                <li><strong>Maintaining Trust & Reputation:</strong> Building long-term relationships through reliability and professionalism.</li>
+                <li><strong>Avoiding Business Impact:</strong> Preventing financial losses, legal issues, and operational inefficiencies.</li>
+                <li><strong>Ensuring Smooth Operations:</strong> Making sure workflows are efficient and effective for everyone.</li>
+            </ul>
+        </div>
+
+        <div class="slide workstream-header-slide" id="concierge-reservations">
+            <h2>Workstream: Concierge Reservations</h2>
+            <p>Ensuring seamless bookings and secure transactions.</p>
+        </div>
+
+        <div class="slide">
+            <h2>Critical Error Spotlight: Credit Card Information</h2>
+            <h3>Workstream: Concierge Reservations Call</h3>
+            <p class="deviation-description"><strong>Deviation:</strong> Capturing credit card information during a call recording. <span class="severity critical">Critical</span></p>
+            <p class="impact-statement"><strong>Why it's CRITICAL:</strong> This is a severe breach of security standards (like PCI-DSS). It exposes users to fraud, the company to legal action, and severely damages trust.</p>
+            <p class="agent-pov-reminder"><strong>Agent POV Reminder:</strong> Absolutely NO credit card details are to be verbally captured or recorded. Guide users to secure payment methods.</p>
+            <div class="tip-box">
+                <h4>Remember:</h4>
+                <ul>
+                    <li>Never ask for or record full credit card numbers.</li>
+                    <li>Refer to secure payment gateways or processes.</li>
+                    <li>If a user accidentally provides it, immediately inform them not to and guide them to the correct method.</li>
+                </ul>
+            </div>
+            <p class="deviation-description">Agent must say they are calling from ClassPass Concierge on behalf of a ClassPass user in all calls. <span class="severity mid">Mid</span></p>
+            <p class="deviation-description">All Concierge calls must be recorded and added on the MB sharepoint in a timely manner. <span class="severity mid">Mid</span></p>
+            <p class="deviation-description">First touch made by another ninja other than oon owner in admin. If a note marked "in progress" was added by a ninja other than the OON owner. <span class="severity mid">Mid</span></p>
+            <p class="deviation-description">No attempt was made to call the reservation. <span class="severity high">High</span></p>
+            <p class="deviation-description">Not processing refund accurately or in a timely manner. <span class="severity mid">Mid</span></p>
+        </div>
+
+        <div class="slide workstream-header-slide" id="partner-launch">
+            <h2>Workstream: Partner Launch</h2>
+            <p>Setting up new partners for success from day one.</p>
+        </div>
+
+        <div class="slide">
+            <h2>Partner Launch: Recording Verbiage & Initial Setup</h2>
+            <h3>Workstream: Partner Launch: Call Team</h3>
+            <p class="deviation-description"><strong>Deviation:</strong> Not delivering recording verbiage to inform customers their call is being recorded. <span class="severity mid">Mid</span></p>
+            <p class="impact-statement"><strong>Impact:</strong> Non-compliance with privacy laws, potential legal issues for both company and customer.</p>
+
+            <h3>Workstream: Partner Launch: Page Builder</h3>
+            <p class="deviation-description"><strong>Deviation:</strong> Incorrect Class Level Pricing (CLP) or missing booking instructions for F&B/Google Meta Data. <span class="severity mid">Mid</span></p>
+            <p class="deviation-description">For F&B Venues, Booking instruction must be enabled for ALL MARKETS. Google Meta Data should be enabled for all NY & Chicago Markets. <span class="severity low">Low</span></p>
+            <p class="deviation-description">iCal Venues - Calendar Sync and the correct link should also be added For all venues. <span class="severity mid">Mid</span></p>
+            <p class="deviation-description">FCF errors - Venues should be launched with the correct FCF setup. <span class="severity mid">Mid</span></p>
+            <p class="deviation-description">XPO/F45 Special Configurations (Booking window, FCF limit, Smart Spot, Notifications). <span class="severity mid">Mid</span></p>
+            <p class="impact-statement"><strong>Impact:</strong> Incorrect prices, possible escalations, business impact due to wrong setup, double bookings, or missing info. Users getting more free classes than allowed, incorrect booking experience for key accounts, business impact.</p>
+            <p class="call-to-action"><strong>Your Action:</strong> Thoroughly review all setup parameters, especially pricing, booking instructions, FCF, and specific brand configurations for accuracy.</p>
+        </div>
+
+        <div class="slide">
+            <h2>Partner Launch: Case Owner - Critical Go-Live Checks</h2>
+            <h3>Workstream: Partner Launch: Case Owner</h3>
+            <div class="deviation-section">
+                <h4>Venue Disabled/Hidden After Launch</h4>
+                <p><strong>Deviation:</strong> Venue was launched but is Disabled in admin. <span class="severity mid">Mid</span></p>
+                <p><strong>Deviation:</strong> Venue was launched but still hidden in search. <span class="severity mid">Mid</span></p>
+                <p><strong>Impact:</strong> Partner is not active, no bookings, direct loss of revenue for the partner, leading to escalations.</p>
+            </div>
+            <div class="deviation-section">
+                <h4>Incorrect Payment Account ID (PID) / Pricing / Kickback</h4>
+                <p><strong>Deviation:</strong> Incorrect Payment Account ID link to venue (Tipalti). <span class="severity high">High</span></p>
+                <p><strong>Deviation:</strong> Pricing (Should match SFDC opp). <span class="severity mid">Mid</span></p>
+                <p><strong>Deviation:</strong> Kickback not properly process/tagged. <span class="severity mid">Mid</span></p>
+                <p class="impact-statement"><strong>Impact:</strong> Direct financial impact! Partners will *not* receive payments, incorrect charges, and severe escalations, especially for VIP accounts.</p>
+            </div>
+            <div class="deviation-section">
+                <h4>Incorrect Integration Linked / Spot Bonus Agreement</h4>
+                <p><strong>Deviation:</strong> Incorrect integration linked to venue. <span class="severity high">High</span></p>
+                <p><strong>Deviation:</strong> Incorrect Spot Bonus Agreement. <span class="severity mid">Mid</span></p>
+                <p><strong>Impact:</strong> Affects booking functionality, monetary impact on partner payments, business/monetary impact, and possible escalation.</p>
+            </div>
+            <p class="call-to-action"><strong>Your Action:</strong> Perform rigorous post-launch checks. Verify activation status, PID, pricing, integration, and all payment-related agreements.</p>
+        </div>
+
+
+        <div class="slide workstream-header-slide" id="sop-ticketing">
+            <h2>Workstream: SOP Ticketing</h2>
+            <p>Efficiently managing account updates and partner data.</p>
+        </div>
+
+        <div class="slide">
+            <h2>SOP Ticketing: Accuracy & Completion</h2>
+            <h3>Workstream: SOP Ticketing</h3>
+            <div class="deviation-section">
+                <h4>Unable to Complete Request</h4>
+                <p><strong>Deviation:</strong> Unable to complete request provided in the "Description Information" or "End Result". <span class="severity low">Low</span></p>
+                <p><strong>Impact:</strong> Incomplete account updates, business/venue/opportunity impact, possible out-of-access issues, user frustration.</p>
+            </div>
+            <div class="deviation-section">
+                <h4>Tipalti Mapping & PID Accuracy</h4>
+                <p><strong>Deviation:</strong> PID is correct in Admin. <span class="severity high">High</span></p>
+                <p class="impact-statement"><strong>Impact:</strong> Critical financial error! Partners will *not* receive payments from ClassPass. Important and business impacting.</p>
+            </div>
+            <div class="deviation-section">
+                <h4>Merge Account Failure</h4>
+                <p><strong>Deviation:</strong> Unable to complete merge request. <span class="severity mid">Mid</span></p>
+                <p><strong>Impact:</strong> Results in duplicate accounts, confusion, and potential escalations if not merged correctly.</p>
+            </div>
+            <p class="call-to-action"><strong>Your Action:</strong> Always ensure full completion of requests. Double-check all payment IDs. Verify merges carefully to avoid data duplication.</p>
+        </div>
+
+        <div class="slide workstream-header-slide" id="hapi-reservation">
+            <h2>Workstream: HAPI Reservation</h2>
+            <p>Ensuring accurate and timely reservation management.</p>
+        </div>
+
+        <div class="slide">
+            <h2>HAPI Reservation: Precise Booking & Cancellation</h2>
+            <h3>Workstream: HAPI Reservation</h3>
+            <div class="deviation-section">
+                <h4>Reservation Not Verified/Handled Correctly</h4>
+                <p><strong>Deviation:</strong> Correct location, date and time, service, room, and user details (name, email address). Sent a confirmation email to the user upon agreeing to flexible time. FOR F&B: Zeroed out the amount and tip before placing the order. For WaxOn: Practioner's name must match on the venue booking platform. <span class="severity mid">Mid</span></p>
+                <p class="impact-statement"><strong>Impact:</strong> Reservation not booked, business impact (venue waits for customer), partner support contact for compensation.</p>
+            </div>
+            <div class="deviation-section">
+                <h4>Incorrect Cancellation Procedure</h4>
+                <p><strong>Deviation:</strong> Reservation was removed from Venue Platform after user cancellation. Reservation was cancelled in admin if the reservation is not available. Booking a User Cancelled Reservation. <span class="severity mid">Mid</span></p>
+                <p class="impact-statement"><strong>Impact:</strong> Other users cannot book slots, user credits not returned, potential compensation claims, poor user/partner experience.</p>
+            </div>
+            <div class="deviation-section">
+                <h4>Incorrect ClassPass Tagging/Notes</h4>
+                <p><strong>Deviation:</strong> Refers to the tagging/notes in the Venue Platform. <span class="severity low">Low</span></p>
+                <p><strong>Impact:</strong> Venue not notified of ClassPass booking (though they see it booked), minor impact.</p>
+            </div>
+            <p class="call-to-action"><strong>Your Action:</strong> Verify every detail of the reservation. Execute cancellation procedures meticulously. Ensure correct tagging for clarity.</p>
+        </div>
+
+        <div class="slide workstream-header-slide" id="hapi-scheduling">
+            <h2>Workstream: HAPI Scheduling</h2>
+            <p>Maintaining accurate and visible class schedules.</p>
+        </div>
+
+        <div class="slide">
+            <h2>HAPI Scheduling: Preventing Schedule Discrepancies</h2>
+            <h3>Workstream: HAPI Scheduling</h3>
+            <div class="deviation-section">
+                <h4>Multiple Errors on Schedule</h4>
+                <p><strong>Deviation:</strong> Multiple Errors in Schedule. <span class="severity mid">Mid</span></p>
+                <p><strong>Impact:</strong> Incorrect class bookings, partner requests for correction, negative customer experience, business impact.</p>
+            </div>
+            <div class="deviation-section">
+                <h4>Venue Tagged CNB but Schedule Available</h4>
+                <p><strong>Deviation:</strong> Tagged the venue as CNB but schedule is available. <span class="severity mid">Mid</span></p>
+                <p><strong>Impact:</strong> Lost business (ClassPass schedule not showing to customers), business appears closed to users, business impact.</p>
+            </div>
+            <div class="deviation-section">
+                <h4>Tagged SFR but Should Be CNB (Address Discrepancy)</h4>
+                <p><strong>Deviation:</strong> Tagged venue as SFR but should be CNB due to address discrepancy. <span class="severity high">High</span></p>
+                <p class="impact-statement"><strong>Impact:</strong> Customers cannot locate venue, business impact, extremely frustrating for users.</p>
+            </div>
+            <p class="deviation-description">Remarks to be used for COULD NOT BUILD. <span class="severity low">Low</span></p>
+            <p class="call-to-action"><strong>Your Action:</strong> Verify schedule accuracy. Ensure venue tags (CNB/SFR) precisely reflect actual venue status and address details.</p>
+        </div>
+
+        <div class="slide workstream-header-slide" id="expand-team">
+            <h2>Workstream: Expand Team</h2>
+            <p>Accurate opportunity creation for new partnerships.</p>
+        </div>
+
+        <div class="slide">
+            <h2>Expand Team: Precise Opportunity Creation</h2>
+            <h3>Workstream: Expand Team</h3>
+            <p class="deviation-description"><strong>Deviation:</strong> 2 or more errors in Q3 (Selected the correct contact, Tag the opportunity as an “Amendment”, Opportunity Information, Buyer Insight & Deal Strategy, Onboarding Notes, Additional Details). <span class="severity low">Low</span></p>
+            <p><strong>Impact:</strong> No direct financial impact, but can lead to incorrect opportunity processing, requiring client changes.</p>
+            <p class="call-to-action"><strong>Your Action:</strong> Pay close attention to all fields when creating opportunities to avoid errors in critical information.</p>
+        </div>
+
+        <div class="slide workstream-header-slide" id="corporate-workstream">
+            <h2>Workstream: Corporate</h2>
+            <p>Professional communication and lead management.</p>
+        </div>
+
+        <div class="slide">
+            <h2>Corporate Workstream: Professionalism & Precision</h2>
+            <h3>Workstream: Corporate Workstream</h3>
+            <div class="deviation-section">
+                <h4>Incorrect Macro/Canned Response or Internal Notes</h4>
+                <p><strong>Deviation:</strong> Incorrect Macro/canned response used. <span class="severity low">Low</span></p>
+                <p><strong>Deviation:</strong> Internal notes and instructions within the response were not removed before sending the email. <span class="severity low">Low</span></p>
+                <p><strong>Impact:</strong> Unprofessional communication, unclear responses, potential repeat contacts, exposes internal information.</p>
+            </div>
+            <div class="deviation-section">
+                <h4>Customer Mistreatment</h4>
+                <p><strong>Deviation:</strong> Customer Mistreatment: Rudeness, Condescending Statements, Sarcastic Remarks, Discriminatory Language, Other unprofessional or inappropriate behavior. <span class="severity high">High</span></p>
+                <p class="impact-statement"><strong>Impact:</strong> DAMAGES customer experience, erodes trust, harms brand reputation, and can lead to disciplinary action.</p>
+            </div>
+            <div class="deviation-section">
+                <h4>Missed Transitioning/Cancelling Users & Unqualified Leads</h4>
+                <p><strong>Deviation:</strong> Missed transitioning/cancelling users. <span class="severity mid">Mid</span></p>
+                <p><strong>Deviation:</strong> Reaching out to an unqualified lead. <span class="severity low">Low</span></p>
+                <p><strong>Impact:</strong> Contractual issues, continued billing for churned accounts, wasted effort on unqualified leads.</p>
+            </div>
+            <p class="call-to-action"><strong>Your Action:</strong> Personalize communications, always maintain professionalism, ensure accurate user transitions, and qualify leads carefully.</p>
+        </div>
+
+        <div class="slide workstream-header-slide" id="all-lobs">
+            <h2>Workstream: All LOBs</h2>
+            <p>Adhering to foundational policies and conduct.</p>
+        </div>
+
+        <div class="slide">
+            <h2>ALL LOBs: Upholding Zero Tolerance Policy</h2>
+            <h3>Workstream: ALL LOBs</h3>
+            <p class="deviation-description"><strong>Deviation:</strong> Compliant with SupportNinja's Zero Tolerance Policy: Contact avoidance, Survey manipulation, Fraud, Releasing of confidential information, Customer mistreatment. <span class="severity high">High</span></p>
+            <p class="impact-statement"><strong>Why it's CRITICAL:</strong> Leads to severe consequences including damaged customer trust, legal issues, harm to company reputation, customer dissatisfaction, business loss, and disciplinary action (up to termination).</p>
+            <p class="deviation-description">Customer/Contact Avoidance: Releasing the call, Pretending to have technical issues causing the customer to end the call, Excessive Hold time, Others. <span class="severity high">High</span></p>
+            <p class="deviation-description">Any instance of an agent failing to close a chat promptly after resolution, as instructed and exemplified in the provided communication, will be considered a serious breach of protocol. <span class="severity high">High</span></p>
+            <p class="deviation-description">Customer Mistreatment: Rudeness, Condescending Statements, Sarcastic Remarks, Discriminatory Language, Other unprofessional or inappropriate behavior. <span class="severity high">High</span></p>
+            <p class="call-to-action"><strong>Your Action:</strong> Familiarize yourself thoroughly with the Zero Tolerance Policy. Any violation is extremely serious and will result in disciplinary action. Ensure timely and professional chat closure.</p>
+        </div>
+
+        <div class="slide workstream-header-slide" id="partner-support">
+            <h2>Workstream: Partner Support</h2>
+            <p>Accurate communication and partner account management.</p>
+        </div>
+
+        <div class="slide">
+            <h2>Partner Support: Precise Communication & Account Handling</h2>
+            <h3>Workstream: Partner Support</h3>
+            <div class="deviation-section">
+                <h4>Sharing Internal Documents & Notes in External Comms</h4>
+                <p><strong>Deviation:</strong> Sharing of internal documents (including docs, screen capture/video of admin, SFDC any other internal tools). <span class="severity mid">Mid</span></p>
+                <p><strong>Deviation:</strong> Internal notes/instructions within the response aren’t deleted before sending. <span class="severity low">Low</span></p>
+                <p><strong>Impact:</strong> Exposes internal information, unprofessional, leads to confusion/delays.</p>
+            </div>
+            <div class="deviation-section">
+                <h4>Incorrect Venue Churn/Enablement Dates</h4>
+                <p><strong>Deviation:</strong> Churned/disabled the venue early – did not follow the correct date (e.g., studio closure). <span class="severity mid">Mid</span></p>
+                <p><strong>Deviation:</strong> Did not churn a venue after the churn date. <span class="severity mid">Mid</span></p>
+                <p><strong>Impact:</strong> No booking when partner is active, partner receiving reservations when churned, business impact, user booking unavailable services.</p>
+            </div>
+            <div class="deviation-section">
+                <h4>Contacting DNC (Do Not Contact) Emails/AMs/Brands</h4>
+                <p><strong>Deviation:</strong> Sent an email to a DNC (Do Not Contact) email address. <span class="severity mid">Mid</span></p>
+                <p><strong>Deviation:</strong> Reached out to other email address under The Studio MDR. We should only reach out or send emails to vip@thestudiomdr.com. <span class="severity mid">Mid</span></p>
+                <p><strong>Deviation:</strong> Handled case of a DNC AM. <span class="severity mid">Mid</span></p>
+                <p><strong>Deviation:</strong> Sent an email to DNC brands or studios. <span class="severity mid">Mid</span></p>
+                <p class="impact-statement"><strong>Impact:</strong> Escalations (especially contacting CEOs on DNC list), misrouting of fraud cases, incorrect/delayed resolution, damage to relationships.</p>
+            </div>
+            <p class="call-to-action"><strong>Your Action:</strong> Strictly adhere to DNC lists. Verify churn dates. Keep internal and external communications separate and professional.</p>
+        </div>
+
+        <div class="slide">
+            <h2>Partner Support: Detailed Follow-Through & Clarity</h2>
+            <h3>Workstream: Partner Support</h3>
+            <div class="deviation-section">
+                <h4>Email Subject Line, Canned Response, Follow-up Issues</h4>
+                <p><strong>Deviation:</strong> The subtitle/location of the studio (if has multiple locations) is not included or specified in the email when reaching out to the partner through GG cases. <span class="severity low">Low</span></p>
+                <p><strong>Deviation:</strong> Failed to update the subject line when sending the initial response in email. <span class="severity low">Low</span></p>
+                <p><strong>Deviation:</strong> Incorrect canned response used/not answering all of the partner questions. <span class="severity low">Low</span></p>
+                <p><strong>Deviation:</strong> Not sending a follow up email after the initial email has been made. <span class="severity low">Low</span></p>
+                <p><strong>Deviation:</strong> Incorrect follow up spiel was used. <span class="severity low">Low</span></p>
+                <p><strong>Impact:</strong> Repeat contacts, partner confusion, incomplete resolutions, additional steps needed.</p>
+            </div>
+            <div class="deviation-section">
+                <h4>Not Fully Explaining Source Conversion Impact on Reservations</h4>
+                <p><strong>Deviation:</strong> Not fully explaining that reservations will be canceled when doing a source conversion. <span class="severity mid">Mid</span></p>
+                <p class="impact-statement"><strong>Impact:</strong> May lead to payment disputes, lost reservations if not explained clearly.</p>
+            </div>
+            <div class="deviation-section">
+                <h4>Erroneous Procedures & Flagged Cases</h4>
+                <p><strong>Deviation:</strong> An erroneous procedure leads to either a breach of privacy or adverse effects on the business. e.g., NOT CANCELLING the test reservation, rate change, failure to submit a rate change after Source Conversion (wellness, class level pricing). <span class="severity mid">Mid</span></p>
+                <p><strong>Deviation:</strong> Flagged cases by the client and were not posted in Rate Change Approval and Escalation GC. <span class="severity mid">Mid to High</span></p>
+                <p class="impact-statement"><strong>Impact:</strong> Business/monetary impact (financial losses, incorrect charges), possible escalation for payment discrepancy.</p>
+            </div>
+            <div class="deviation-section">
+                <h4>Missing Hyperlinks & Incorrect Case Assignment</h4>
+                <p><strong>Deviation:</strong> Did not hyperlinking the articles, ClassPass helping link. <span class="severity low">Low</span></p>
+                <p><strong>Deviation:</strong> Responded to a partner under Stasia’s name. <span class="severity mid">Mid</span></p>
+                <p><strong>Deviation:</strong> Put a case into Emma Flemming’s name – these cases must go to Stasia Wheaton. <span class="severity mid">Mid</span></p>
+                <p><strong>Deviation:</strong> If an account is in Stasia's name, the team cannot engage and it needs to come directly to Stasia. PS can now assist partners in Emma Flemming's name. <span class="severity low">Low</span></p>
+                <p><strong>Impact:</strong> Harder navigation for partners, incorrect/delayed resolution for sensitive cases (e.g., fraud/satellite escalation partners).</p>
+            </div>
+            <div class="deviation-section">
+                <h4>Misleading Guidance on Ratings</h4>
+                <p><strong>Deviation:</strong> We should never tell partners they can mark users as missed just to remove a rating as it will incorrectly charge the user who did attend class. <span class="severity high">High</span></p>
+                <p class="impact-statement"><strong>Impact:</strong> User will have a No Show Charge, missing credits, or cancellation fee charged inappropriately.</p>
+            </div>
+            <p class="call-to-action"><strong>Your Action:</strong> Ensure complete and accurate communication. Follow all procedures meticulously, especially for financial and sensitive issues. Route cases to the correct owners.</p>
+        </div>
+
+        <div class="slide workstream-header-slide" id="project-team">
+            <h2>Workstream: Project Team</h2>
+            <p>Accuracy in all project-related data and processes.</p>
+        </div>
+
+        <div class="slide">
+            <h2>Project Team: Accuracy in BAU Projects</h2>
+            <h3>Workstream: Project Team</h3>
+            <p class="deviation-description"><strong>Deviation:</strong> BAU Projects > common denominator of projects (Accuracy, Business/ Monetary impact). <span class="severity high">High</span></p>
+            <p class="impact-statement"><strong>Impact:</strong> Accuracy issues, business/monetary impact, potential re-work.</p>
+            <p class="call-to-action"><strong>Your Action:</strong> Maintain high accuracy for all project tasks, as they form the foundation of many operations.</p>
+        </div>
+
+        <div class="slide workstream-header-slide" id="specialized-processes">
+            <h2>Workstream: Specialized Processes</h2>
+            <p>Ensuring precision in critical, complex workflows.</p>
+        </div>
+
+        <div class="slide">
+            <h2>Specialized Processes: Avoiding Critical Errors</h2>
+            <h3>Workstream: Rate Change</h3>
+            <p class="deviation-description"><strong>Deviation:</strong> An erroneous procedure leads to either a breach of privacy or adverse effects on the business. e.g., rate change, failure to submit a rate change (venue level *fitness/wellness, class level pricing). <span class="severity high">High</span></p>
+            <p class="impact-statement"><strong>Impact:</strong> Business/monetary impact, financial losses (incorrect charges, lost revenue).</p>
+
+            <h3>Workstream: Source Conversion</h3>
+            <p class="deviation-description"><strong>Deviation:</strong> Mistakes at any stage of the source conversion process – from incorrect platform identification and ID retrieval (e.g., from Tableau or Mindbody) to improper activation, class management, or case status updates. <span class="severity high">High</span></p>
+            <p class="impact-statement"><strong>Impact:</strong> Erroneous data, operational inefficiencies, negative business impacts (customers unable to book, partners losing revenue), privacy breach.</p>
+
+            <h3>Workstream: Data Migration</h3>
+            <p class="deviation-description"><strong>Deviation:</strong> Selecting the correct due date when adding a membership for the user and/or unable to end the contract/membership of the user. <span class="severity high">High</span></p>
+            <p class="impact-statement"><strong>Impact:</strong> Financial loss if the agent mistakenly selected incorrect contract date that might result to extended membership.</p>
+
+            <h3>Workstream: GDPR</h3>
+            <p class="deviation-description"><strong>Deviation:</strong> Checklist items not visible on QA side when the account has been deleted. Tracker audit (country, credit card removed). Date of deletion discrepancy. Same day before processing of cards and accounts > billing renewed > cx came back bec of the payment. <span class="severity high">High</span></p>
+            <p class="impact-statement"><strong>Impact:</strong> Business/monetary impact due to compliance issues, renewed billing for deleted accounts, and user dissatisfaction.</p>
+            <p class="call-to-action"><strong>Your Action:</strong> These processes require extreme diligence. Follow every step precisely, verify all data, and escalate immediately if issues arise.</p>
+        </div>
+
+        <div class="slide" id="key-takeaways">
+            <h2>Key Takeaways & Your Role</h2>
+            <ul>
+                <li><strong>Attention to Detail:</strong> Even small deviations can have significant impacts.</li>
+                <li><strong>Understand the "Why":</strong> Knowing the consequences helps prevent errors.</li>
+                <li><strong>Communicate Clearly:</strong> Both internally and externally.</li>
+                <li><strong>Utilize Resources:</strong> If unsure, check documentation or ask your TL/Manager.</li>
+                <li><strong>You are the Front Line:</strong> Your diligence protects ClassPass, our partners, and our users.</li>
+            </ul>
+            <p class="forms-link">
+                Please submit your attendance and feedback here: <br>
+                <a href="https://forms.gle/WH3ePYBM5jmVMHhq9" target="_blank">Submit Attendance & Feedback</a>
+            </p>
+            <p class="closing-statement">Thank you for your commitment to excellence!</p>
+        </div>
+
+    </div>
+
+    <script>
+        // JavaScript for smooth scrolling
+        function scrollToId(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                // Adjust scroll position to account for sticky navbar height
+                const navbarHeight = document.querySelector('.navbar').offsetHeight;
+                const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                window.scrollTo({
+                    top: elementPosition - navbarHeight - 20, // 20px extra padding
+                    behavior: 'smooth'
+                });
+            }
+        }
+    </script>
+</body>
+</html>
